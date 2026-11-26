@@ -6,7 +6,7 @@ import ChatLoadingIndicator from './ChatLoadingIndicator.jsx'
 import Icon from './Icon.jsx'
 import SuggestedQuestions from './SuggestedQuestions.jsx'
 
-export default function ChatPanel({ suggestions }) {
+export default function ChatPanel({ suggestions, onRetry }) {
   const titleId = useId()
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState([])
@@ -82,6 +82,11 @@ export default function ChatPanel({ suggestions }) {
     input.current.focus()
   }
 
+  function retryQuestion(question) {
+    onRetry()
+    sendQuestion(question)
+  }
+
   return (
     <section className="chat" aria-labelledby={titleId}>
       <header className="chat-header">
@@ -109,7 +114,7 @@ export default function ChatPanel({ suggestions }) {
           <AssistantMessage key={index} source={message.source} error={message.kind === 'error'}>
             <p>{message.text}</p>
             {message.kind === 'error' && (
-              <button type="button" disabled={busy} onClick={() => sendQuestion(message.question)}
+              <button type="button" disabled={busy} onClick={() => retryQuestion(message.question)}
                 className="message-retry">
                 Tentar novamente
               </button>

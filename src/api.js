@@ -3,6 +3,11 @@ import { API_BASE_URL } from './config.js'
 
 const api = axios.create({ baseURL: API_BASE_URL })
 
+export async function isApiOnline(signal) {
+  const { data } = await api.get('/health', { signal, timeout: 8000 })
+  return data?.status === 'online'
+}
+
 function vehicleFromSource(source) {
   const parts = source.replace(/\.md$/i, '').split(/[_-]+/).filter(Boolean)
   const words = parts.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
