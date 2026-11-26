@@ -104,13 +104,13 @@ export default function ChatPanel({ suggestions }) {
           <SuggestedQuestions questions={suggestions} onSelect={sendQuestion} />
         )}
         {messages.map((message, index) => message.kind === 'question' ? (
-          <p key={index} className="user-bubble">{message.text}</p>
+          <p key={index} className="user-bubble message-bubble">{message.text}</p>
         ) : (
           <AssistantMessage key={index} source={message.source} error={message.kind === 'error'}>
             <p>{message.text}</p>
             {message.kind === 'error' && (
               <button type="button" disabled={busy} onClick={() => sendQuestion(message.question)}
-                className="mt-2 font-semibold text-primary underline disabled:opacity-65">
+                className="message-retry">
                 Tentar novamente
               </button>
             )}
