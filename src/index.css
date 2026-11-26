@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@font-face {
+  font-family: Inter;
+  src: url('./assets/inter-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: Inter, Arial, sans-serif;
+  --color-page: #f5f8f6;
+  --color-ink: #092328;
+  --color-surface: #fff;
+  --color-primary: #12544f;
+  --color-primary-hover: #0d403d;
+  --color-soft: #eaf3ed;
+  --color-processing: #dbede2;
+  --color-muted: #f0f5f1;
+  --color-muted-ink: #52665d;
+  --color-edge: #dce5df;
+  --color-field: #b4c8bc;
+  --color-vehicle: #2a835f;
+  --color-success: #167345;
+  --color-error: #b42318;
+  --animate-exhaust: exhaust 1.2s ease-out infinite;
+  --car-pass-duration: 2.2s;
+  --animate-car-drive: car-drive var(--car-pass-duration) linear both;
+  --animate-car-reveal: car-reveal var(--car-pass-duration) linear both;
+
+  @keyframes car-reveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0); }
+  }
+
+  @keyframes car-drive {
+    from { left: 0; transform: translateX(-100%); }
+    to { left: 100%; transform: translateX(-100%); }
+  }
+
+  @keyframes exhaust {
+    0%, 100% { opacity: .4; transform: translateX(0); }
+    30% { opacity: 1; }
+    75% { opacity: .25; transform: translateX(-3px); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-page font-sans text-ink leading-[normal] [font-synthesis:none];
+  }
+
+  button, summary {
+    @apply cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary;
+  }
+
+  svg {
+    @apply shrink-0;
+  }
+}

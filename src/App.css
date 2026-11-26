@@ -1,0 +1,98 @@
+@reference "./index.css";
+
+@layer components {
+  .site-header {
+    @apply flex min-h-[76px] items-center justify-between gap-3 bg-ink px-16 text-white max-[760px]:px-6 max-[480px]:px-4 max-[360px]:gap-1.5;
+  }
+  .brand {
+    @apply flex items-center gap-3 whitespace-pre text-[14px] font-bold tracking-[1px] max-[480px]:gap-1 max-[480px]:text-[10px] max-[480px]:tracking-[.4px];
+  }
+  .brand img { @apply rounded-lg max-[360px]:size-8; }
+  .knowledge-badge {
+    @apply flex items-center gap-[7px] rounded-full bg-soft px-3 py-2 text-[10px] font-bold tracking-[.8px] text-primary inset-ring-1 inset-ring-edge max-[480px]:p-[7px] max-[480px]:text-[8px] max-[480px]:tracking-[.4px] max-[360px]:min-w-0;
+  }
+  .knowledge-badge::before { @apply size-[7px] shrink-0 rounded-full bg-success content-['']; }
+
+  .workspace {
+    @apply mx-auto grid max-w-[1132px] gap-6 px-6 pt-12 pb-8 max-[760px]:pt-8 max-[480px]:px-4;
+  }
+  .introduction { @apply grid gap-3; }
+  .introduction p { @apply text-[15px]/[18px] text-muted-ink; }
+  .introduction .eyebrow { @apply text-[11px]/[13px] font-bold tracking-[1.5px] text-primary; }
+  .introduction h1 { @apply text-[34px]/[41px] font-bold tracking-[-1px] max-[480px]:text-[29px]/[1.2]; }
+  .workspace-panels {
+    @apply grid grid-cols-[220px_minmax(0,1fr)] gap-6 max-[760px]:grid-cols-[minmax(0,1fr)];
+  }
+
+  .vehicle-panel, .chat { @apply h-[480px] bg-surface inset-ring-1 inset-ring-edge; }
+  .vehicle-panel { @apply flex flex-col gap-4 rounded-xl p-[18px] max-[760px]:h-auto; }
+  .vehicle-heading { @apply grid gap-[7px]; }
+  .vehicle-heading h2 { @apply flex items-center gap-2 text-[13px] font-bold; }
+  .vehicle-heading svg { @apply text-primary; }
+  .vehicle-panel p { @apply text-[12px]/[1.4] text-muted-ink; }
+  .vehicle-panel hr { @apply h-px shrink-0 border-0 bg-edge; }
+  .vehicle-list {
+    @apply grid list-none gap-2 overflow-auto max-[760px]:grid-cols-2;
+  }
+  .vehicle-list li { @apply flex items-center gap-2.5 rounded-lg bg-muted p-2.5; }
+  .vehicle-list li div { @apply grid min-w-0 gap-0.5 [overflow-wrap:anywhere]; }
+  .vehicle-list svg { @apply text-vehicle; }
+  .vehicle-list strong { @apply text-[13px] font-bold; }
+  .vehicle-list span { @apply text-[11px] text-muted-ink; }
+  .vehicle-status { @apply grid justify-items-start gap-2; }
+  .vehicle-status button { @apply rounded-lg border border-field bg-surface p-2 text-[12px] text-primary; }
+
+  .chat { @apply grid grid-rows-[70px_minmax(0,1fr)_auto] rounded-2xl max-[760px]:h-[520px]; }
+  .chat-header {
+    @apply relative flex items-center gap-3 px-6 inset-shadow-[0_-1px_var(--color-edge)] max-[480px]:px-4;
+  }
+  .chat-avatar, .message-avatar { @apply grid shrink-0 place-items-center; }
+  .chat-avatar { @apply size-[38px] rounded-[10px] bg-soft text-primary; }
+  .chat-identity { @apply grid gap-[3px]; }
+  .chat-identity h2 { @apply text-[14px] font-bold; }
+  .chat-identity p { @apply text-[12px] text-muted-ink; }
+  .chat-options { @apply ms-auto; }
+  .chat-options summary {
+    @apply -me-1.5 grid size-8 list-none place-items-center rounded-[7px] text-muted-ink hover:bg-soft [&::-webkit-details-marker]:hidden;
+  }
+  .chat-options button {
+    @apply absolute top-14 right-6 z-10 rounded-lg border border-edge bg-surface px-3 py-2.5 text-[12px] text-primary hover:bg-soft max-[480px]:right-4;
+  }
+
+  .transcript { @apply flex flex-col gap-[18px] overflow-auto overscroll-contain p-7 max-[480px]:p-4; }
+  .assistant-message { @apply flex items-start gap-3; }
+  .message-avatar { @apply size-8 rounded-[9px] bg-primary text-white; }
+  .assistant-bubble {
+    @apply w-[min(550px,calc(100%-44px))] rounded-[3px_14px_14px_14px] bg-muted p-[18px] text-[14px] [overflow-wrap:anywhere] max-[480px]:p-3.5;
+  }
+  .assistant-bubble strong { @apply mb-[9px] block leading-[17px] font-bold; }
+  .assistant-bubble p, .user-bubble { @apply leading-[1.5] whitespace-pre-wrap; }
+  .message-source { @apply mt-[9px] block text-muted-ink; }
+  .message-error { @apply text-error; }
+  .user-bubble {
+    @apply max-w-[min(550px,92%)] self-end rounded-[14px_3px_14px_14px] bg-primary px-4 py-3 text-[14px] text-white [overflow-wrap:anywhere];
+  }
+  .suggestions { @apply grid max-w-full gap-2.5 self-start pt-2 pl-11; }
+  .suggestions p { @apply text-[11px]/[13px] font-bold tracking-[1px] text-muted-ink; }
+  .suggestion-list { @apply flex flex-wrap gap-2; }
+  .suggestion-list button {
+    @apply max-w-full rounded-lg bg-surface px-3 py-2.5 text-start text-[12px]/[15px] text-primary [overflow-wrap:anywhere] inset-ring-1 inset-ring-field hover:bg-soft;
+  }
+
+  .composer {
+    @apply grid gap-2.5 px-6 pt-4 pb-5 inset-shadow-[0_1px_var(--color-edge)] max-[480px]:px-4;
+  }
+  .question-field {
+    @apply flex h-[52px] items-center gap-2 rounded-[9px] py-1.5 pr-[7px] pl-[15px] inset-ring-1 inset-ring-field focus-within:inset-ring-2 focus-within:inset-ring-primary;
+  }
+  .question-field input {
+    @apply h-full w-0 flex-1 bg-transparent text-[13px] text-ink outline-none placeholder:text-muted-ink;
+  }
+  .send-button {
+    @apply flex h-[38px] items-center gap-2 rounded-[7px] bg-primary px-4 text-[13px] font-bold text-white hover:bg-primary-hover disabled:cursor-wait disabled:opacity-65 max-[480px]:px-[9px];
+  }
+  .composer p { @apply text-[12px]/[15px] text-muted-ink; }
+  .site-footer {
+    @apply flex flex-wrap justify-between gap-x-4 gap-y-2 text-[10px] font-bold tracking-[.8px] whitespace-pre-wrap text-muted-ink;
+  }
+}
