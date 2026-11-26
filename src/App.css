@@ -67,10 +67,23 @@
   }
   .assistant-bubble strong { @apply mb-[9px] block leading-[17px] font-bold; }
   .assistant-bubble p, .user-bubble { @apply leading-[1.5] whitespace-pre-wrap; }
+  .message-bubble {
+    @apply shadow-[0_1px_2px_#0923280d,0_3px_9px_#09232808] transition-[box-shadow,translate] duration-200 ease-out;
+    @apply hover:shadow-[0_3px_7px_#09232814,0_5px_14px_#0923280d] motion-safe:hover:-translate-y-px;
+    @apply focus-within:shadow-[0_2px_8px_#0923281a] motion-reduce:transition-none;
+  }
+  .assistant-bubble.message-bubble {
+    @apply rounded-[16px_20px_20px_20px] px-[18px] py-4 inset-ring-1 inset-ring-edge/70 max-[480px]:px-4 max-[480px]:py-3.5;
+  }
   .message-source { @apply mt-[9px] block text-muted-ink; }
   .message-error { @apply text-error; }
   .user-bubble {
-    @apply max-w-[min(550px,92%)] self-end rounded-[14px_3px_14px_14px] bg-primary px-4 py-3 text-[14px] text-white [overflow-wrap:anywhere];
+    @apply max-w-[min(550px,92%)] origin-bottom-right self-end rounded-[20px_16px_20px_20px] bg-primary px-[18px] py-3.5 text-[14px] text-white [overflow-wrap:anywhere];
+    @apply motion-safe:animate-message-enter;
+  }
+  .message-retry {
+    @apply -ml-2 mt-1.5 rounded-lg px-2 py-1 font-semibold text-primary underline decoration-primary/40 underline-offset-2 transition-colors duration-150;
+    @apply hover:bg-soft focus-visible:bg-soft disabled:opacity-65 motion-reduce:transition-none;
   }
   .suggestions { @apply grid max-w-full gap-2.5 self-start pt-2 pl-11; }
   .suggestions p { @apply text-[11px]/[13px] font-bold tracking-[1px] text-muted-ink; }
