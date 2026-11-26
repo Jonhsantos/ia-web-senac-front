@@ -1,53 +1,86 @@
 # Assistente Automotivo — Frontend
 
-Interface em React com Tailwind CSS, Axios e React Router. O Vite
-executa e compila o projeto.
+Interface do assistente automotivo em React com Tailwind CSS, Axios e React
+Router. Consulta o catálogo e recebe as respostas em streaming do backend
+[ia-web-senac](https://github.com/Jonhsantos/ia-web-senac).
 
 ## Executar
 
-Requisitos: Node.js 20.19+ ou 22.12+ e npm.
+Use Node.js 20.19 ou superior na série 20, ou Node.js 22.12 ou superior, com npm.
+Inicie primeiro o backend conforme o README dele. Por padrão, a API local
+escuta em `http://127.0.0.1:8000`.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-A configuração é opcional em desenvolvimento. Para personalizá-la, copie
-`.env.example` para `.env` e ajuste os valores:
+Abra o endereço exibido pelo Vite, normalmente <http://localhost:5173>.
 
-```env
-VITE_API_BASE_URL=/api
-API_PROXY_TARGET=http://127.0.0.1:8000
-```
+## Configuração
 
-Acesse o endereço exibido no terminal (normalmente http://localhost:5173).
-Para usar a API, inicie também o backend conforme o README do projeto
-`ia-web-senac`; por padrão, ele usa http://127.0.0.1:8000.
+A configuração local é opcional. Para mudar os valores abaixo, copie
+`.env.example` para `.env` e reinicie o Vite.
 
-Durante o desenvolvimento, o Vite encaminha requisições de `/api` para o
-backend, removendo o prefixo: por exemplo, `/api/chat` corresponde a
-`http://127.0.0.1:8000/chat`. A tela carrega os modelos e as perguntas
-sugeridas de `GET /knowledge` e abre o stream de respostas em `POST /chat/stream`.
-O carro aparece enquanto o chat aguarda o primeiro trecho. A resposta é exibida
-à medida que chega, com opção de parar ou tentar novamente em caso de falha.
-Para versões da API que retornam somente `sources`, a interface deriva os
-nomes dos veículos dos arquivos Markdown e exibe sugestões quando fornecidas.
+| Variável | Padrão | Uso |
+| --- | --- | --- |
+| `VITE_API_BASE_URL` | `/api` | Prefixo ou URL da API no navegador. |
+| `API_PROXY_TARGET` | `http://127.0.0.1:8000` | Destino do proxy de desenvolvimento. |
 
-O proxy funciona apenas no servidor de desenvolvimento do Vite. Em produção,
-configure um proxy equivalente no servidor que hospeda o frontend ou defina
-`VITE_API_BASE_URL` como a URL pública do backend antes de executar
-`npm run build`. Nesse último caso, o backend deve permitir a origem do
-frontend via CORS. Variáveis `VITE_` são públicas e incorporadas ao build:
-nunca coloque chaves ou senhas nelas. Alterações exigem um novo build.
+O Vite remove o prefixo `/api` ao encaminhar as chamadas. Por exemplo,
+`/api/chat/stream` chega ao backend como `POST /chat/stream`.
+Variáveis `VITE_*` são públicas e entram no build. A chave do Gemini fica no
+`.env` do backend.
 
-O cliente Axios em `src/api.js` usa `API_BASE_URL` de `src/config.js`.
-O React Router carrega o catálogo ao abrir a rota principal. Os componentes
-da interface ficam em `src/components/`.
+## Como o chat funciona
 
-## Outros comandos
+- A rota inicial carrega modelos e perguntas sugeridas em `GET /knowledge`.
+  Se a API só retornar `sources`, a interface deriva os nomes dos arquivos.
+- Antes do primeiro trecho, o chat mostra a etapa enviada pelo backend,
+  como pesquisa na base, consulta ao modelo ou fallback. O carro revela o
+  texto do balão de espera e estaciona no fim de cada passagem. A preferência
+  por movimento reduzido desativa a animação.
+- Depois do primeiro evento `delta`, a resposta cresce no balão padrão. O
+  evento `done` conclui a resposta e entrega a fonte, quando disponível.
+- **Parar** cancela a requisição e preserva o texto já recebido. Em caso de
+  falha, **Tentar novamente** reenvia a pergunta.
+
+O cliente Axios usa `ReadableStream` e decodificação incremental de UTF-8
+para ler o NDJSON de `POST /chat/stream`.
+
+## Estrutura
+
+| Caminho | Responsabilidade |
+| --- | --- |
+| `src/main.jsx` | React Router e carregamento do catálogo. |
+| `src/App.jsx` | Estrutura da página e estados do catálogo. |
+| `src/api.js` e `src/config.js` | Cliente Axios, leitura do stream e endereço do backend. |
+| `src/components/` | Catálogo, chat, formulário e indicador de espera. |
+| `src/index.css` e `src/App.css` | Tema Tailwind, estilos e animações. |
+
+## Build e publicação
+
+Em produção, configure o servidor para encaminhar `/api` ao backend sem
+buffering na rota de streaming, ou defina `VITE_API_BASE_URL` com a URL
+pública da API antes do build. No segundo caso, permita a origem do
+frontend no CORS do backend. Mudanças nas variáveis `VITE_*` exigem um
+novo build.
+
+Hospede a pasta `dist/` e configure o servidor para entregar `index.html`
+nas rotas da interface. O comando `preview` serve para conferir o build
+localmente.
 
 ```bash
 npm run lint
 npm run build
 npm run preview
 ```
+
+## Solução de problemas
+
+| Sintoma | O que verificar |
+| --- | --- |
+| Modelos não carregam | Confirme que o backend responde em `/health` e `/knowledge` e que a porta bate com `API_PROXY_TARGET`. |
+| O chat responde com `404` | Confira se a versão do backend oferece `POST /chat/stream`. |
+| O texto chega todo de uma vez | Confira se o proxy de produção está armazenando a resposta em buffer antes de repassar o stream. |
+| O chat exibe erro de geração | Verifique a chave do Gemini no backend e acompanhe no terminal as entradas com o mesmo `[chat <id>]`. |
